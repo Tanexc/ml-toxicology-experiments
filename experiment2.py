@@ -117,6 +117,14 @@ def compute_metrics(y_true, p_oof):
     }
 
 
+def compute_baseline_brier(y, cv_splits):
+    y = np.asarray(y)
+    p_baseline = np.empty(len(y))
+    for train, valid in cv_splits:
+        p_baseline[valid] = y[train].mean()
+    return brier_score_loss(y, p_baseline)
+
+
 def evaluate_model_by_n(
     set_id, model_name, n, ranking, X, y, ids, numeric_features, outer_splits,
 ):
@@ -134,8 +142,7 @@ def evaluate_model_by_n(
             p_train = model.predict_proba(X.iloc[train][selected])[:, 1]
             train_brier.append(brier_score_loss(y.iloc[train], p_train))
 
-    row = {"n_features": n, **compute_metrics(y, p_oof)}
-    row["train_Brier_mean"] = float(np.mean(train_brier))
+    row = {"n_features": n, **compute_metrics(y, p_oof), "train_Brier_mean": float(np.mean(train_brier))}
     row["Brier_gap"] = row["Brier_Score"] - row["train_Brier_mean"]
     predictions = pd.DataFrame({
         "set_id": set_id,
@@ -205,6 +212,10 @@ def main():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     outer_cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
     outer_splits = list(outer_cv.split(np.zeros(len(y)), y))
+    baseline_brier = compute_baseline_brier(y, outer_splits)
+    pd.DataFrame({"baseline_brier": [baseline_brier]}).to_csv(
+        OUTPUT_DIR / "baseline_brier.csv", index=False,
+    )
     all_predictions = []
 
     for set_id, ranking in ratings.items():

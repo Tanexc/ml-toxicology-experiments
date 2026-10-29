@@ -29,12 +29,13 @@ DATA_PATH = ROOT / "data" / "patients.json"
 OUTPUT_DIR = ROOT / "results" / "res1"
 
 FEATURES_1 = [
-    "diagnosis_severity_code", "exposure_cause_code", "exposure_duration",
+    #"diagnosis_severity_code",
+    "exposure_cause_code", "exposure_duration",
     "alcohol_code", "pallor_code", "hyperemia_code", "respiratory_rate",
     "systolic_bp", "diastolic_bp", "nausea_code", "glasgow_recorded_code",
     "meningeal_signs_code", "mydriasis_code", "miosis_code",
     "pupil_reaction_code", "nystagmus_code", "cough_reflex_code",
-    "hypertonus_code", "hypotonus_code", "admission_severity_unconfirmed",
+    "hypertonus_code", "hypotonus_code", #"admission_severity_unconfirmed",
     "weakness_code", "headache_code", "tinnitus_code", "dizziness_code",
     "hoarseness_code", "ataxia_code", "seizures_code",
 ]
@@ -43,9 +44,9 @@ NUMERIC_FEATURES_1 = [
 ]
 
 FEATURES_2 = [
-    "sex_code", "age_years", "diagnosis_severity_code", "exposure_duration",
+    "sex_code", "age_years", "ecg_text", "exposure_duration",
     "alcohol_code", "pallor_code", "conjunctival_hyperemia_code", "pulse",
-    "nausea_code", "hypertonus_code", "admission_severity_unconfirmed",
+    "nausea_code", "hypertonus_code", #"admission_severity_unconfirmed",
     "hemoglobin", "erythrocytes", "glucose", "cohb_1", "consciousness_code",
     "mental_state_code", "headache_code", "tinnitus_code", "cns_score_raw",
 ]
